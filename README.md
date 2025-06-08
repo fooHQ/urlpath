@@ -3,15 +3,14 @@
 [![urlpath release (latest SemVer)](https://img.shields.io/github/v/release/foohq/urlpath?sort=semver)](https://github.com/foohq/urlpath/releases)
 [![Go Reference](https://img.shields.io/static/v1?label=godoc&message=reference&color=blue)](https://pkg.go.dev/github.com/foohq/urlpath)
 
-Module urlpath implements utility functions for manipulating paths. Paths can be represented as Unix, Windows paths, and URLs.
+The urlpath module provides utility functions for manipulating file paths and URLs. It supports a variety of path formats, including Unix, Windows, and URL notations.
 
-For example, the following paths are accepted by the module:
+Supported path formats include:
 
-* `/home/user/file.txt`
-* `file:///home/user/file.txt`
-* `http://www.example.com/assets/file.js`
-* `C:\Windows\System32\cmd.exe` (DOS path)
-* `\\10.10.0.55\COMP\customers.xls` (UNC path)
+* Unix: `/home/user/file.txt`, `../otherfile.txt`
+* URL: `file:///home/user/file.txt`, `http://www.example.com/assets/file.js`
+* Windows (DOS): `C:\Windows\System32\cmd.exe`
+* Windows (UNC): `\\10.10.0.55\COMP\customers.xls`
 
 > [!NOTE]
 > DOS and UNC paths are only supported when `GOOS=windows`.
