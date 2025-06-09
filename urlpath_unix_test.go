@@ -58,7 +58,6 @@ func TestDir(t *testing.T) {
 		{"file:///home/user/test.txt", "file:///home/user"},
 		{"mem:///home/user/test.txt", "mem:///home/user"},
 		{"http://localhost:8118/home/user/test.txt", "http://localhost:8118/home/user"},
-		// FIXME: behavior is inconsistent with Base.
 		{"http://localhost:8118", "http://localhost:8118/"},
 	}
 	for i, test := range tests {
