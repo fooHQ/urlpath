@@ -23,14 +23,14 @@ func fromString(pth string) (*url.URL, error) {
 }
 
 func isAbsURL(u *url.URL) bool {
-	return u.Scheme != "" || u.Host != "" || (u.Path != "" && filepath.VolumeName(u.Path[1:]) != "") || path.IsAbs(u.Path)
+	return u.Scheme != "" || u.Host != "" || volumeName(u) != "" || path.IsAbs(u.Path)
 }
 
 func toString(u *url.URL) string {
-	if strings.Contains(u.Path, ":") {
-		return path.Clean(u.Path[1:])
+	if volumeName(u) != "" {
+		u.Path = path.Clean(u.Path[1:])
 	}
-	if !isFileURL(u) {
+	if u.Scheme != "" {
 		return u.Scheme + "://" + u.Host + path.Join("/", u.Path)
 	}
 	if u.Host != "" {
@@ -40,16 +40,10 @@ func toString(u *url.URL) string {
 }
 
 func normalize(u, wd *url.URL) string {
-	if u.Scheme != "" || u.Host != "" || (u.Path != "" && filepath.VolumeName(u.Path[1:]) != "") {
-		if u.Scheme == "" {
-			u.Scheme = "file"
-		}
+	if u.Scheme != "" || u.Host != "" || volumeName(u) != "" {
 		u.Path = path.Clean(u.Path)
 	} else {
 		u.Scheme = wd.Scheme
-		if u.Scheme == "" {
-			u.Scheme = "file"
-		}
 		u.Host = wd.Host
 		if !path.IsAbs(u.Path) {
 			u.Path = path.Join(wd.Path, u.Path)
@@ -58,4 +52,11 @@ func normalize(u, wd *url.URL) string {
 		}
 	}
 	return toString(u)
+}
+
+func volumeName(u *url.URL) string {
+	if u.Path == "" {
+		return ""
+	}
+	return filepath.VolumeName(u.Path[1:])
 }

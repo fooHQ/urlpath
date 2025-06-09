@@ -18,7 +18,7 @@ func TestAbs(t *testing.T) {
 		{"../test.txt", "mem:///home/user", "mem:///home/test.txt"},
 		{"/home/user", "mem:///test", "mem:///home/user"},
 		{"/home/user", "mem:///test", "mem:///home/user"},
-		{"file:///home/user", "mem:///test", "/home/user"},
+		{"file:///home/user", "mem:///test", "file:///home/user"},
 		{"http://example.com/test.txt", "http://example.com:8888", "http://example.com/test.txt"},
 		{"./", "mem:///test", "mem:///test"},
 	}
@@ -55,7 +55,7 @@ func TestDir(t *testing.T) {
 		{"/home/user/test.txt", "/home/user"},
 		{"./test.txt", "."},
 		{"/home/user/../test.txt", "/home"},
-		{"file:///home/user/test.txt", "/home/user"},
+		{"file:///home/user/test.txt", "file:///home/user"},
 		{"mem:///home/user/test.txt", "mem:///home/user"},
 		{"http://localhost:8118/home/user/test.txt", "http://localhost:8118/home/user"},
 		// FIXME: behavior is inconsistent with Base.
@@ -89,7 +89,7 @@ func TestExt(t *testing.T) {
 func TestClean(t *testing.T) {
 	tests := [][2]string{
 		{"", "."},
-		{"file:///home/user/../test.txt", "/home/test.txt"},
+		{"file:///home/user/../test.txt", "file:///home/test.txt"},
 		{"mem:///home/user/test.txt", "mem:///home/user/test.txt"},
 		{"mem:///home/user/./test.txt", "mem:///home/user/test.txt"},
 		{"mem:///home/user/../test.txt", "mem:///home/test.txt"},
@@ -123,6 +123,8 @@ func TestIsAbs(t *testing.T) {
 
 func TestJoin(t *testing.T) {
 	tests := [][3]string{
+		{"/home/user", "test.txt", "/home/user/test.txt"},
+		{"file:///home/user", "test.txt", "file:///home/user/test.txt"},
 		{"mem:///home/user", "test.txt", "mem:///home/user/test.txt"},
 		{"mem:///home/user", "mem:///test.txt", "mem:///home/user/test.txt"},
 		{"/home/user", "mem:///test.txt", "/home/user/test.txt"},
@@ -136,8 +138,9 @@ func TestJoin(t *testing.T) {
 
 func TestSplit(t *testing.T) {
 	tests := [][3]string{
+		{"/home/user/test.txt", "/home/user", "test.txt"},
 		{"mem:///home/user/test.txt", "mem:///home/user", "test.txt"},
-		{"file:///home/user/test.txt", "/home/user", "test.txt"},
+		{"file:///home/user/test.txt", "file:///home/user", "test.txt"},
 		{"http://localhost:8118/home/user/test.txt", "http://localhost:8118/home/user", "test.txt"},
 	}
 	for i, test := range tests {
