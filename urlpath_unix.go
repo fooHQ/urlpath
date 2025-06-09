@@ -17,7 +17,7 @@ func isAbsURL(u *url.URL) bool {
 }
 
 func toString(u *url.URL) string {
-	if !isFileURL(u) {
+	if u.Scheme != "" {
 		return u.Scheme + "://" + u.Host + path.Join("/", u.Path)
 	}
 	return path.Clean(u.Path)
@@ -25,15 +25,9 @@ func toString(u *url.URL) string {
 
 func normalize(u, wd *url.URL) string {
 	if u.Scheme != "" || u.Host != "" {
-		if u.Scheme == "" {
-			u.Scheme = "file"
-		}
 		u.Path = path.Clean(u.Path)
 	} else {
 		u.Scheme = wd.Scheme
-		if u.Scheme == "" {
-			u.Scheme = "file"
-		}
 		u.Host = wd.Host
 		if !path.IsAbs(u.Path) {
 			u.Path = path.Join(wd.Path, u.Path)
