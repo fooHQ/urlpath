@@ -126,12 +126,14 @@ func TestClean(t *testing.T) {
 
 func TestIsAbs(t *testing.T) {
 	tests := map[string]bool{
-		"":                           false,
-		"/home/user/test.txt":        true,
-		"./test.txt":                 false,
-		"/home/user/../test.txt":     true,
-		"file:///home/user/test.txt": true,
-		"mem:///home/user/test.txt":  true,
+		"":                                         false,
+		"/home/user/test.txt":                      true,
+		"./test.txt":                               false,
+		"/home/user/../test.txt":                   true,
+		"file:///home/user/test.txt":               true,
+		"file:///home/user/../test.txt":            true,
+		"mem:///home/user/test.txt":                true,
+		"mem:///home/user/../test.txt":             true,
 		"http://localhost:8118/home/user/test.txt": true,
 		"http://localhost:8118":                    true,
 		"//127.0.0.1/home/user/test.txt":           true,

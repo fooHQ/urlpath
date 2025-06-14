@@ -13,7 +13,7 @@ func fromString(pth string) (*url.URL, error) {
 }
 
 func isAbsURL(u *url.URL) bool {
-	return ((u.Scheme != "" || u.Host != "") && (u.Path == "" || path.IsAbs(u.Path))) || (isFileURL(u) && path.IsAbs(u.Path))
+	return u.Scheme != "" || path.IsAbs(u.Path)
 }
 
 func toString(u *url.URL) string {
