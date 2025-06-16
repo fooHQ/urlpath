@@ -26,6 +26,18 @@ func isAbsURL(u *url.URL) bool {
 	return u.Scheme != "" || u.Host != "" || volumeName(u) != "" || path.IsAbs(u.Path)
 }
 
+func pathURL(u *url.URL) string {
+	if volumeName(u) != "" {
+		u.Path = u.Path[1:]
+	}
+
+	if isFileURL(u) && u.Host != "" {
+		return "//" + u.Host + path.Join("/", u.Path)
+	}
+
+	return path.Clean(u.Path)
+}
+
 func toString(u *url.URL) string {
 	if volumeName(u) != "" {
 		u.Path = path.Clean(u.Path[1:])

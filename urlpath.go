@@ -155,6 +155,21 @@ func Match(pattern, name string) (bool, error) {
 	return path.Match(pattern, name)
 }
 
+// Path extracts the path component of the input URL string.
+// It parses the input as a URL, cleans the path component to remove unnecessary
+// elements like "." and "..", and returns the resulting path as a string.
+// On Windows, if the path includes a volume name (e.g., "C:"), the leading slash
+// is removed from the output. For file URLs with a non-empty host, the host is
+// included in the output path (e.g., "//host/path").
+// Returns an error if the input path fails to parse.
+func Path(pth string) (string, error) {
+	u, err := fromString(pth)
+	if err != nil {
+		return "", err
+	}
+	return pathURL(u), nil
+}
+
 func isFileURL(u *url.URL) bool {
 	return u.Scheme == "file" || u.Scheme == ""
 }
