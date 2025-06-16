@@ -165,6 +165,20 @@ func TestMatch(t *testing.T) {
 	}
 }
 
+func TestScheme(t *testing.T) {
+	tests := [][2]string{
+		{"/home/user/test.txt", ""},
+		{"mem:///home/user/test.txt", "mem"},
+		{"file:///home/user/test.txt", "file"},
+		{"http://localhost:8118/home/user/test.txt", "http"},
+	}
+	for i, test := range tests {
+		scheme, err := urlpath.Scheme(test[0])
+		require.NoError(t, err)
+		require.Equal(t, test[1], scheme, "test %d/%d failed", i+1, len(tests))
+	}
+}
+
 func TestPath(t *testing.T) {
 	tests := [][2]string{
 		{"", "."},
