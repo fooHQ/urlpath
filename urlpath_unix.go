@@ -28,7 +28,7 @@ func toString(u *url.URL) string {
 }
 
 func normalize(u, wd *url.URL) string {
-	if u.Scheme != "" || u.Host != "" {
+	if u.Scheme != "" {
 		u.Path = path.Clean(u.Path)
 	} else {
 		u.Scheme = wd.Scheme
