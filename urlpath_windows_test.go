@@ -195,3 +195,25 @@ func TestMatch(t *testing.T) {
 		require.True(t, match, "test %d/%d failed", i+1, len(tests))
 	}
 }
+
+func TestPath(t *testing.T) {
+	tests := [][2]string{
+		{"", "."},
+		{"/home/user/test.txt", "/home/user/test.txt"},
+		{"./test.txt", "test.txt"},
+		{"/home/user/../test.txt", "/home/test.txt"},
+		{"file:///home/user/test.txt", "/home/user/test.txt"},
+		{"mem:///home/user/test.txt", "/home/user/test.txt"},
+		{"http://localhost:8118/home/user/test.txt", "/home/user/test.txt"},
+		{"http://localhost:8118", "."},
+		{"//127.0.0.1/home/user/test.txt", "//127.0.0.1/home/user/test.txt"},
+		{"file://127.0.0.1/home/user/test.txt", "//127.0.0.1/home/user/test.txt"},
+		{"C:/home/user/test.txt", "C:/home/user/test.txt"},
+		{"file:///C:/home/user/test.txt", "C:/home/user/test.txt"},
+	}
+	for i, test := range tests {
+		base, err := urlpath.Path(test[0])
+		require.NoError(t, err)
+		require.Equal(t, test[1], base, "test %d/%d failed", i+1, len(tests))
+	}
+}
