@@ -16,6 +16,10 @@ func isAbsURL(u *url.URL) bool {
 	return u.Scheme != "" || path.IsAbs(u.Path)
 }
 
+func pathURL(u *url.URL) string {
+	return path.Clean(u.Path)
+}
+
 func toString(u *url.URL) string {
 	if u.Scheme != "" {
 		return u.Scheme + "://" + u.Host + path.Join("/", u.Path)
