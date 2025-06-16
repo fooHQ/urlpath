@@ -155,6 +155,18 @@ func Match(pattern, name string) (bool, error) {
 	return path.Match(pattern, name)
 }
 
+// Scheme extracts the scheme component of the input URL string.
+// It parses the input as a URL and returns the scheme (e.g., "http", "file").
+// If no scheme is present, an empty string is returned.
+// Returns an error if the input path fails to parse.
+func Scheme(pth string) (string, error) {
+	u, err := fromString(pth)
+	if err != nil {
+		return "", err
+	}
+	return u.Scheme, nil
+}
+
 // Path extracts the path component of the input URL string.
 // It parses the input as a URL, cleans the path component to remove unnecessary
 // elements like "." and "..", and returns the resulting path as a string.
