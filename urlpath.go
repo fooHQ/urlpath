@@ -17,7 +17,7 @@ import (
 // Returns an error if either the path or working directory fails to parse.
 func Abs(pth, wd string) (string, error) {
 	if wd == "" {
-		wd = "/"
+		wd = string(PathSeparator)
 	}
 	u, err := fromString(pth)
 	if err != nil {

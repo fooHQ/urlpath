@@ -7,6 +7,11 @@ import (
 	"path"
 )
 
+const (
+	PathSeparator     = '/'
+	PathListSeparator = ':'
+)
+
 // fromString must not call path.Clean on URL.Path!
 func fromString(pth string) (*url.URL, error) {
 	return url.Parse(pth)
@@ -22,7 +27,7 @@ func pathURL(u *url.URL) string {
 
 func toString(u *url.URL) string {
 	if u.Scheme != "" {
-		return u.Scheme + "://" + u.Host + path.Join("/", u.Path)
+		return u.Scheme + "://" + u.Host + path.Join(string(PathSeparator), u.Path)
 	}
 	return path.Clean(u.Path)
 }
