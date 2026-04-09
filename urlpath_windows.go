@@ -9,14 +9,19 @@ import (
 	"strings"
 )
 
+const (
+	PathSeparator     = '/'
+	PathListSeparator = ';'
+)
+
 // fromString must not call path.Clean on URL.Path!
 func fromString(pth string) (*url.URL, error) {
-	pth = strings.ReplaceAll(pth, "\\", "/")
+	pth = strings.ReplaceAll(pth, "\\", string(PathSeparator))
 	volume := filepath.VolumeName(pth)
 	if strings.Contains(volume, ":") {
 		// Is an absolute path starting with volume name (i.e. C:\)...
 		return &url.URL{
-			Path: "/" + pth,
+			Path: string(PathSeparator) + pth,
 		}, nil
 	}
 	return url.Parse(pth)
@@ -32,7 +37,7 @@ func pathURL(u *url.URL) string {
 	}
 
 	if isFileURL(u) && u.Host != "" {
-		return "//" + u.Host + path.Join("/", u.Path)
+		return "//" + u.Host + path.Join(string(PathSeparator), u.Path)
 	}
 
 	return path.Clean(u.Path)
@@ -43,10 +48,10 @@ func toString(u *url.URL) string {
 		u.Path = path.Clean(u.Path[1:])
 	}
 	if u.Scheme != "" {
-		return u.Scheme + "://" + u.Host + path.Join("/", u.Path)
+		return u.Scheme + "://" + u.Host + path.Join(string(PathSeparator), u.Path)
 	}
 	if u.Host != "" {
-		return "//" + u.Host + path.Join("/", u.Path)
+		return "//" + u.Host + path.Join(string(PathSeparator), u.Path)
 	}
 	return path.Clean(u.Path)
 }
